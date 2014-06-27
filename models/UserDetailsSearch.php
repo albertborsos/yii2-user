@@ -1,14 +1,14 @@
 <?php
 
-namespace vendor\albertborsos\user\models;
+namespace albertborsos\yii2user\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use vendor\albertborsos\user\models\UserDetails;
+use albertborsos\yii2user\models\UserDetails;
 
 /**
- * UserDetailsSearch represents the model behind the search form about `vendor\albertborsos\user\models\UserDetails`.
+ * UserDetailsSearch represents the model behind the search form about `albertborsos\yii2user\models\UserDetails`.
  */
 class UserDetailsSearch extends UserDetails
 {

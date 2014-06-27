@@ -64,7 +64,7 @@ class RegisterCest
         //$I->see('Sikeres regisztráció!');
 
         $I->seeInDatabase(
-            \vendor\albertborsos\user\models\Users::tableName(),
+            \albertborsos\yii2user\models\Users::tableName(),
             [
                 'email' => $this->user['email'],
                 'status' => 'i',
@@ -72,7 +72,7 @@ class RegisterCest
         );
 
         $I->seeInDatabase(
-            \vendor\albertborsos\user\models\UserDetails::tableName(),
+            \albertborsos\yii2user\models\UserDetails::tableName(),
             [
                 'name_first' => $this->user['firstname'],
                 'name_last' => $this->user['lastname'],
@@ -84,7 +84,7 @@ class RegisterCest
         \ActivatePage::of($I)->activate($this->user);
         $I->see('Sikeres aktiválás!');
         $I->seeInDatabase(
-            \vendor\albertborsos\user\models\Users::tableName(),
+            \albertborsos\yii2user\models\Users::tableName(),
             [
                 'email' => $this->user['email'],
                 'status' => 'a',
@@ -92,7 +92,7 @@ class RegisterCest
         );
 
         $I->seeInDatabase(
-            \vendor\albertborsos\user\models\UserDetails::tableName(),
+            \albertborsos\yii2user\models\UserDetails::tableName(),
             [
                 'name_first' => $this->user['firstname'],
                 'name_last' => $this->user['lastname'],

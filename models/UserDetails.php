@@ -1,6 +1,6 @@
 <?php
 
-namespace vendor\albertborsos\user\models;
+namespace albertborsos\yii2user\models;
 
 use Yii;
 use yii\base\ModelEvent;

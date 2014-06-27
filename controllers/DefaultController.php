@@ -1,14 +1,14 @@
 <?php
 
-namespace vendor\albertborsos\user\controllers;
+namespace albertborsos\yii2user\controllers;
 
-use vendor\albertborsos\lib\Controller;
-use vendor\albertborsos\user\forms\LoginForm;
-use vendor\albertborsos\user\forms\RegisterForm;
-use vendor\albertborsos\user\forms\ReminderForm;
-use vendor\albertborsos\user\forms\SetNewPasswordForm;
-use vendor\albertborsos\user\models\Users;
-use vendor\albertborsos\user\models\UserDetails;
+use albertborsos\yii2lib\web\Controller;
+use albertborsos\yii2user\forms\LoginForm;
+use albertborsos\yii2user\forms\RegisterForm;
+use albertborsos\yii2user\forms\ReminderForm;
+use albertborsos\yii2user\forms\SetNewPasswordForm;
+use albertborsos\yii2user\models\Users;
+use albertborsos\yii2user\models\UserDetails;
 use yii\base\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -82,14 +82,12 @@ class DefaultController extends Controller
     {
         $this->layout = '//center';
 
-        return $this->render('index', [
-                'params' => $this->breadcrumbs,
-            ]);
+        return $this->render('index');
     }
 
     public function actionLogin()
     {
-        if (!\Yii::$app->user->isGuest) {
+        if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
@@ -107,6 +105,7 @@ class DefaultController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
+        Yii::$app->session->setFlash('error', '<h4>Sikeresen kijelentkeztél!</h4>');
 
         return $this->goHome();
     }
@@ -117,7 +116,7 @@ class DefaultController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->register()) {
                 Yii::$app->session->setFlash('<h4>Sikeres regisztráció!</h4>');
-                $this->redirect(['/users/login']);
+                return $this->redirect(['/users/login']);
             }
         }
 
@@ -149,7 +148,7 @@ class DefaultController extends Controller
                             if ($userdetails->save()){
                                 $transaction->commit();
                                 Yii::$app->session->setFlash('success', '<h4>Sikeres aktiválás!</h4><p>Most már be tudsz lépni az oldalra!</p>');
-                                $this->redirect(['/users/login']);
+                                return $this->redirect(['/users/login']);
                             }else{
                                 throw new Exception('<h4>Nem sikerült bekativálni a fiókod</h4>');
                             }
@@ -167,7 +166,7 @@ class DefaultController extends Controller
             }catch (Exception $e){
                 $transaction->rollBack();
                 Yii::$app->session->setFlash('error', $e->getMessage());
-                $this->redirect(['/users/login']);
+                return $this->redirect(['/users/login']);
             }
         }
     }
@@ -182,7 +181,7 @@ class DefaultController extends Controller
                 $user->generatePasswordResetToken();
                 if ($user->save()){
                     Yii::$app->session->setFlash('success', '<h4>Jelszóemlékeztető kiküldve!</h4><p>A pontos tennivalókért olvasd el a levelet, amit küldtünk!</p>');
-                    $this->redirect(['/users/login']);
+                    return $this->redirect(['/users/login']);
                 }else{
                     Yii::$app->session->setFlash('error', '<h4>Jelszóemlékeztetőt nem sikerült kiküldeni!</h4>');
                 }
@@ -223,7 +222,7 @@ class DefaultController extends Controller
                 ]);
         }else{
             Yii::$app->session->setFlash('error', '<h4>Nem megfelelő a link...</h4><p>... vagy már lejárt a jelszóemlékeztetőd. Próbálj meg kérni egy újat!</p>');
-            $this->redirect(['/users/reminder']);
+            return $this->redirect(['/users/reminder']);
         }
     }
 

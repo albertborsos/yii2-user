@@ -1,12 +1,12 @@
 <?php
 
-namespace vendor\albertborsos\user;
+namespace albertborsos\yii2user;
 
 use yii\base\BootstrapInterface;
 
 class Module extends \yii\base\Module implements BootstrapInterface
 {
-    public $controllerNamespace = 'vendor\albertborsos\user\controllers';
+    public $controllerNamespace = 'albertborsos\yii2user\controllers';
     public $name = 'Felhasználó';
 
     /**

@@ -1,5 +1,5 @@
 <?php
-    namespace vendor\albertborsos\user\models;
+    namespace albertborsos\yii2user\models;
 
     use yii\base\NotSupportedException;
     use yii\db\ActiveRecord;

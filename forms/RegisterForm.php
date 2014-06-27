@@ -6,10 +6,10 @@
  * Time: 13:46
  */
 
-namespace vendor\albertborsos\user\forms;
+namespace albertborsos\yii2user\forms;
 
-use vendor\albertborsos\user\models\UserDetails;
-use vendor\albertborsos\user\models\Users;
+use albertborsos\yii2user\models\UserDetails;
+use albertborsos\yii2user\models\Users;
 use Yii;
 use yii\base\Exception;
 use yii\base\Model;
@@ -35,7 +35,7 @@ class RegisterForm extends Model {
 
 
             ['email', 'filter', 'filter' => 'trim'],
-            ['email', 'unique', 'targetClass' => 'vendor\albertborsos\user\models\Users', 'message' => 'Ezzel az emailcímmel már regisztráltak!'],
+            ['email', 'unique', 'targetClass' => 'albertborsos\yii2user\models\Users', 'message' => 'Ezzel az emailcímmel már regisztráltak!'],
             ['email', 'required'],
             ['email', 'email'],
 

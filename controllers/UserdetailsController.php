@@ -1,10 +1,10 @@
 <?php
 
-namespace vendor\albertborsos\user\controllers;
+namespace albertborsos\yii2user\controllers;
 
 use Yii;
-use vendor\albertborsos\user\models\UserDetails;
-use vendor\albertborsos\user\models\UserDetailsSearch;
+use albertborsos\yii2user\models\UserDetails;
+use albertborsos\yii2user\models\UserDetailsSearch;
 use vendor\albertborsos\lib\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

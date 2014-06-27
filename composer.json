@@ -1,0 +1,14 @@
+{
+    "name": "albertborsos/yii2-user",
+    "description": "A collection of useful classes",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "albertborsos/yii2-lib": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "albertborsos\\yii2user\\": ""
+        }
+    }
+}

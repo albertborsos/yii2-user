@@ -6,9 +6,9 @@
  * Time: 13:46
  */
 
-namespace vendor\albertborsos\user\forms;
+namespace albertborsos\yii2user\forms;
 
-use vendor\albertborsos\user\models\Users;
+use albertborsos\yii2user\models\Users;
 use Yii;
 use yii\base\Model;
 
@@ -25,7 +25,7 @@ class ReminderForm extends Model {
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'required'],
             ['email', 'exist',
-                'targetClass' => 'vendor\albertborsos\user\models\Users',
+                'targetClass' => 'albertborsos\yii2user\models\Users',
                 'filter' => ['status' => Users::STATUS_ACTIVE],
                 'message' => 'Nincs ilyen e-mailcím a rendszerben, vagy még nem aktiváltad a fiókod!',
             ],
