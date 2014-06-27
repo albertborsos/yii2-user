@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'password')->passwordInput() ?>
 
             <div class="btn-block">
-                <?= Html::submitButton('Bejelentkezés', ['class' => 'btn btn-primary col-md-12']) ?>
+                <?= Html::submitButton('Bejelentkezés', ['class' => 'btn btn-primary col-md-12', 'id' => 'loginform-submit']) ?>
                 <?= Html::a('Elfelejtett jelszó', Yii::$app->urlManager->createUrl(['/users/reminder']), ['class' => 'btn btn-warning col-md-12']) ?>
                 <?php ActiveForm::end(); ?>
             </div>

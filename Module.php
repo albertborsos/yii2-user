@@ -7,6 +7,7 @@ use yii\base\BootstrapInterface;
 class Module extends \yii\base\Module implements BootstrapInterface
 {
     public $controllerNamespace = 'vendor\albertborsos\user\controllers';
+    public $name = 'Felhasználó';
 
     /**
      * Module specific urlManager

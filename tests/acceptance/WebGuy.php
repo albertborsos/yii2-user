@@ -7,7 +7,6 @@
 use \Codeception\Maybe;
 use Codeception\Module\WebHelper;
 use Codeception\Module\PhpBrowser;
-use common\tests\_helpers\FixtureHelper;
 use Codeception\Module\Db;
 
 /**
@@ -2053,25 +2052,6 @@ class WebGuy extends \Codeception\AbstractGuy
      */
     public function dontSeeInTitle($title) {
         $this->scenario->addStep(new \Codeception\Step\Assertion('dontSeeInTitle', func_get_args()));
-        if ($this->scenario->running()) {
-            $result = $this->scenario->runStep();
-            return new Maybe($result);
-        }
-        return new Maybe();
-    }
-
- 
-    /**
-     * This method is generated.
-     * Documentation taken from corresponding module.
-     * ----------------------------------------------
-     *
-     * @inheritdoc
-     * @see common\tests\_helpers\FixtureHelper::fixtures()
-     * @return \Codeception\Maybe
-     */
-    public function fixtures() {
-        $this->scenario->addStep(new \Codeception\Step\Action('fixtures', func_get_args()));
         if ($this->scenario->running()) {
             $result = $this->scenario->runStep();
             return new Maybe($result);

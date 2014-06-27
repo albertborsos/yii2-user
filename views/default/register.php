@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'password')->passwordInput() ?>
 
             <div class="btn-block">
-                <?= Html::submitButton('Regisztráció', ['class' => 'btn btn-primary col-md-12']) ?>
+                <?= Html::submitButton('Regisztráció', ['class' => 'btn btn-primary col-md-12', 'id' => 'registerform-submit']) ?>
             </div>
             <?php ActiveForm::end(); ?>
             <div class="alert alert-info text-justify">

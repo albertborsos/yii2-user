@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'email') ?>
 
             <div class="btn-block">
-                <?= Html::submitButton('Jelszóemlékeztető küldése!', ['class' => 'btn btn-primary col-md-12']) ?>
+                <?= Html::submitButton('Jelszóemlékeztető küldése!', ['class' => 'btn btn-primary col-md-12', 'id' => 'reminderform-submit']) ?>
                 <?php ActiveForm::end(); ?>
             </div>
         </div>

@@ -52,3 +52,64 @@ CREATE TABLE `tbl_user_usersessions` (
   `status` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `tbl_user_users` (`id`, `email`, `password_hash`, `auth_key`, `password_reset_token`, `username`, `created_at`, `activated_at`, `updated_at`, `status`)
+VALUES
+	(1,'albertborsos@me.com','$2y$13$ATfxN7nHdGIC.eZj5THf5.BRh0toZ51/4p5DtUTCanA/VMgLsweW.','wwGQRT5Tc2hhTBszP22o0igy-EoCUl6r',NULL,'albertborsos','2014-04-30 22:41:27','2014-04-30 22:41:28','2014-04-30 22:41:28','a');
+
+/**
+ * Database schema required by \yii\rbac\DbManager.
+ *
+ * @author Qiang Xue <qiang.xue@gmail.com>
+ * @author Alexander Kochetov <creocoder@gmail.com>
+ * @link http://www.yiiframework.com/
+ * @copyright 2008 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
+ * @since 2.0
+ */
+
+drop table if exists `auth_assignment`;
+drop table if exists `auth_item_child`;
+drop table if exists `auth_item`;
+drop table if exists `auth_rule`;
+
+create table `auth_rule`
+(
+   `name`                 varchar(64) not null,
+   `data`                 text,
+   `created_at`           integer,
+   `updated_at`           integer,
+    primary key (`name`)
+) engine InnoDB;
+
+create table `auth_item`
+(
+   `name`                 varchar(64) not null,
+   `type`                 integer not null,
+   `description`          text,
+   `rule_name`            varchar(64),
+   `data`                 text,
+   `created_at`           integer,
+   `updated_at`           integer,
+   primary key (`name`),
+   foreign key (`rule_name`) references `auth_rule` (`name`) on delete set null on update cascade,
+   key `type` (`type`)
+) engine InnoDB;
+
+create table `auth_item_child`
+(
+   `parent`               varchar(64) not null,
+   `child`                varchar(64) not null,
+   primary key (`parent`, `child`),
+   foreign key (`parent`) references `auth_item` (`name`) on delete cascade on update cascade,
+   foreign key (`child`) references `auth_item` (`name`) on delete cascade on update cascade
+) engine InnoDB;
+
+create table `auth_assignment`
+(
+   `item_name`            varchar(64) not null,
+   `user_id`              varchar(64) not null,
+   `created_at`           integer,
+   primary key (`item_name`, `user_id`),
+   foreign key (`item_name`) references `auth_item` (`name`) on delete cascade on update cascade
+) engine InnoDB;

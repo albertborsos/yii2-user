@@ -8,11 +8,11 @@ use yii\base\Model;
 /**
  * Login form
  */
-class LoginForm extends Model
+class SetNewPasswordForm extends Model
 {
     public $email;
     public $password;
-    public $rememberMe = true;
+    public $password_again;
 
     private $_user = false;
 
@@ -23,11 +23,11 @@ class LoginForm extends Model
     {
         return [
             // username and password are both required
-            [['email', 'password'], 'required'],
+            [['email', 'password', 'password_again'], 'required'],
             // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
-            ['password', 'validatePassword'],
+            [['password', 'password_again'], 'validatePassword'],
+            [['password', 'password_again'], 'string', 'min' => 8],
         ];
     }
 
@@ -38,7 +38,8 @@ class LoginForm extends Model
     {
         return [
             'email' => 'E-mail cím',
-            'password' => 'Jelszó',
+            'password' => 'Új jelszó',
+            'password_again' => 'Új jelszó mégegyszer',
         ];
     }
 
@@ -49,24 +50,10 @@ class LoginForm extends Model
     public function validatePassword()
     {
         if (!$this->hasErrors()) {
-            $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError('password', 'Nem megfelelő jelszót adtál meg!');
+            if ($this->password !== $this->password_again){
+                $this->addError('password', 'A két jelszó nem egyezik meg!');
+                $this->addError('password_again', 'A két jelszó nem egyezik meg!');
             }
-        }
-    }
-
-    /**
-     * Logs in a user using the provided email and password.
-     *
-     * @return boolean whether the user is logged in successfully
-     */
-    public function login()
-    {
-        if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
-        } else {
-            return false;
         }
     }
 

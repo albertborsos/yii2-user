@@ -52,3 +52,4 @@ CREATE TABLE `tbl_user_usersessions` (
   `status` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
