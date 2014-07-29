@@ -1,6 +1,7 @@
 <?php
 
-use yii\helpers\Html;
+    use albertborsos\yii2lib\helpers\Values;
+    use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /**
@@ -26,21 +27,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name_last')->textInput(['maxlength' => 100]) ?>
 
-    <?= $form->field($model, 'country')->textInput(['maxlength' => 100]) ?>
+    <?= $form->field($model, 'sex')->dropDownList(Values::items('sex')) ?>
 
-    <?= $form->field($model, 'county')->textInput(['maxlength' => 100]) ?>
-
-    <?= $form->field($model, 'city')->textInput(['maxlength' => 100]) ?>
-
-    <?= $form->field($model, 'email')->textInput(['maxlength' => 100]) ?>
-
-    <?= $form->field($model, 'sex')->textInput(['maxlength' => 20]) ?>
-
-    <?= $form->field($model, 'postal_code')->textInput(['maxlength' => 10]) ?>
-
-    <?= $form->field($model, 'phone_1')->textInput(['maxlength' => 30]) ?>
-
-    <?= $form->field($model, 'phone_2')->textInput(['maxlength' => 30]) ?>
+    <?= $form->field($model, 'email')->input('email', ['maxlength' => 100]) ?>
 
     <?= $form->field($model, 'website')->textInput(['maxlength' => 255]) ?>
 
@@ -48,13 +37,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'facebook_profile')->textInput(['maxlength' => 255]) ?>
 
-    <?php
-    //if (Yii::$app->user->checkAccess("admin")){
-    //    print $form->field($model, 'comment_private')->textarea(['rows' => 6]);
-    //}
-    ?>
+    <?= $form->field($model, 'country')->dropDownList(Values::items('countries')) ?>
 
-    <?= $form->field($model, 'status')->textInput(['maxlength' => 1]) ?>
+    <?= $form->field($model, 'county')->textInput(['maxlength' => 100]) ?>
+
+    <?= $form->field($model, 'postal_code')->textInput(['maxlength' => 10]) ?>
+
+    <?= $form->field($model, 'city')->textInput(['maxlength' => 100]) ?>
+
+    <?= $form->field($model, 'phone_1')->textInput(['maxlength' => 30]) ?>
+
+    <?= $form->field($model, 'phone_2')->textInput(['maxlength' => 30]) ?>
 
     <div class="form-group">
         <div class="col-sm-9 pull-right">

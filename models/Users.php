@@ -1,10 +1,20 @@
 <?php
     namespace albertborsos\yii2user\models;
 
+    use albertborsos\yii2lib\helpers\Values;
+    use albertborsos\yii2lib\wrappers\Editable;
+    use albertborsos\yii2user\components\DataProvider;
+    use albertborsos\yii2user\forms\SetNewPasswordForm;
+    use albertborsos\yii2user\languages\hu\Messages;
     use yii\base\NotSupportedException;
+    use yii\base\Security;
+    use yii\data\ArrayDataProvider;
     use yii\db\ActiveRecord;
-    use yii\helpers\Security;
+    use yii\grid\ActionColumn;
+    use yii\grid\GridView;
     use yii\web\IdentityInterface;
+    use Yii;
+    use yii\web\YiiAsset;
 
     /**
      * User model
@@ -72,7 +82,8 @@
                 if ($this->isNewRecord) {
                     //ha uj rekord
                     $this->created_at = date('Y-m-d H:i:s');
-                    $this->auth_key   = Security::generateRandomKey();
+                    $security = new Security();
+                    $this->auth_key   = $security->generateRandomKey();
                 } else {
                     // meglévő rekord
                     $this->updated_at = date('Y-m-d H:i:s');
@@ -86,7 +97,16 @@
 
         public function getDetails()
         {
-            return UserDetails::findOne(['user_id' => $this->id]);
+            $details = UserDetails::findOne(['user_id' => $this->id, 'status' => UserDetails::STATUS_ACTIVE]);
+            if (is_null($details)){
+                // if not exists create one
+                $details = new UserDetails();
+                $details->user_id = $this->id;
+                $details->status = UserDetails::STATUS_ACTIVE;
+                $details->save();
+            }
+
+            return $details;
         }
 
         public function getFullname()
@@ -130,7 +150,7 @@
          */
         public static function findByPasswordResetToken($token)
         {
-            $expire    = \Yii::$app->params['user.passwordResetTokenExpire'];
+            $expire    = Yii::$app->params['user.passwordResetTokenExpire'];
             $parts     = explode('_', $token);
             $timestamp = (int)end($parts);
             if ($timestamp + $expire < time()) {
@@ -181,7 +201,8 @@
          */
         public function validatePassword($password)
         {
-            return Security::validatePassword($password, $this->password_hash);
+            $security = new Security();
+            return $security->validatePassword($password, $this->password_hash);
         }
 
         /**
@@ -191,7 +212,8 @@
          */
         public function setPassword($password)
         {
-            $this->password_hash = Security::generatePasswordHash($password);
+            $security = new Security();
+            $this->password_hash = $security->generatePasswordHash($password);
         }
 
         /**
@@ -199,7 +221,8 @@
          */
         public function generateAuthKey()
         {
-            $this->auth_key = Security::generateRandomKey();
+            $security = new Security();
+            $this->auth_key = $security->generateRandomKey();
         }
 
         /**
@@ -207,7 +230,8 @@
          */
         public function generatePasswordResetToken()
         {
-            $this->password_reset_token = Security::generateRandomKey() . '_' . time();
+            $security = new Security();
+            $this->password_reset_token = $security->generateRandomKey() . '_' . time();
         }
 
         /**
@@ -235,5 +259,111 @@
         public static function findIdentityByAccessToken($token, $type = null)
         {
             // TODO: Implement findIdentityByAccessToken() method.
+        }
+
+        public static function getUsersInGridView(){
+            // lekérdezem a felhasználókat akikhez van jogosultság rendelve
+            $auth = Yii::$app->getAuthManager();
+            $sql = 'SELECT * FROM ' . Users::tableName().' u'
+                .' LEFT JOIN '. $auth->assignmentTable. ' at'
+                .' ON at.user_id=u.id'
+                .' WHERE u.status=:status_a';
+
+            $cmd = Yii::$app->db->createCommand($sql);
+            $cmd->bindValue(':status_a', Users::STATUS_ACTIVE);
+            $results = $cmd->queryAll();
+
+            // a felhasználókat beteszem egy dataprovider-be
+            $dataProvider = new ArrayDataProvider([
+                'allModels'  => $results,
+                'sort'       => [
+                    'attributes' => ['id'],
+                ],
+                'key'        => 'id',
+                'pagination' => false,
+            ]);
+
+            $options_center = ['class' => 'text-center'];
+
+            return GridView::widget([
+                'dataProvider' => $dataProvider,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
+                    [
+                        'attribute'      => 'email',
+                        'header'         => Users::attributeLabels()['email'],
+                        'contentOptions' => $options_center,
+                        'headerOptions'  => $options_center,
+                    ],
+                    [
+                        'attribute'      => 'username',
+                        'header'         => Users::attributeLabels()['username'],
+                        'contentOptions' => $options_center,
+                        'headerOptions'  => $options_center,
+                    ],
+                    [
+                        'attribute'      => 'created_at',
+                        'header'         => Users::attributeLabels()['created_at'],
+                        'contentOptions' => $options_center,
+                        'headerOptions'  => $options_center,
+                    ],
+                    [
+                        'attribute'      => 'activated_at',
+                        'header'         => Users::attributeLabels()['activated_at'],
+                        'contentOptions' => $options_center,
+                        'headerOptions'  => $options_center,
+                    ],
+                    [
+                        'attribute'      => 'updated_at',
+                        'header'         => Users::attributeLabels()['updated_at'],
+                        'contentOptions' => $options_center,
+                        'headerOptions'  => $options_center,
+                    ],
+                    [
+                        'attribute'      => 'status',
+                        'header'         => Users::attributeLabels()['status'],
+                        'contentOptions' => $options_center,
+                        'headerOptions'  => $options_center,
+                    ],
+                    [
+                        'header'         => 'Jogosultság',
+                        'attribute'      => 'ITEM_NAME',
+                        'format'         => 'raw',
+                        'value'          => function ($model, $index, $widget) {
+                            return Editable::select(
+                                           $model['id'] . '-role',
+                                               $model['username'],
+                                               $model['item_name'],
+                                               DataProvider::items('roles', $model['item_name'], false),
+                                               ['/users/rights/modify'],
+                                               DataProvider::items('roles'));
+                        },
+                        'contentOptions' => $options_center,
+                        'headerOptions'  => $options_center,
+                    ],
+                    [
+                        'class'    => ActionColumn::className(),
+                        'template' => '{delete}',
+                    ]
+                ],
+            ]);
+        }
+
+        public function changePassword($email){
+            if ($this->email === $email){
+                $form = new SetNewPasswordForm();
+                if ($form->load(Yii::$app->request->post()) && $form->validate()){
+                    $this->setPassword($form->password);
+                    if ($this->save()){
+                        Yii::$app->session->setFlash('success', Messages::$new_password_successfully_changed);
+                    }else{
+                        Yii::$app->session->setFlash('error', Messages::$new_password_error_wrong_link);
+                    }
+                }else{
+                    Yii::$app->session->setFlash('error', Messages::$new_password_error_valid);
+                }
+            }else{
+                Yii::$app->session->setFlash('error', Messages::$new_password_error_email);
+            }
         }
     }

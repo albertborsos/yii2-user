@@ -29,6 +29,7 @@ use yii\db\BaseActiveRecord;
  */
 class UserDetails extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = 'a';
     /**
      * @inheritdoc
      */

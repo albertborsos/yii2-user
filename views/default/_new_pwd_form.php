@@ -4,7 +4,7 @@ use yii\helpers\Html;
 ?>
 <?php $form = ActiveForm::begin([
         'options' => [
-            'class' => 'form-horizontal'
+            'class' => 'form-horizontal',
         ],
         'fieldConfig' => [
             'template' => '{label}<div class="col-sm-8">{input}</div><div class="col-sm-12">{error}</div>',

@@ -48,6 +48,6 @@ class SetNewPasswordPage
         $I->fillField(self::$passwordAgainField, $user['password']);
         $I->click(self::$submitButton);
 
-        $I->see('Sikeresen frissítetted a jelszavad!');
+        $I->see('Sikeresen frissítetted a jelszavad');
     }
 }

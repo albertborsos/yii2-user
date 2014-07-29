@@ -2,10 +2,10 @@
 
 namespace albertborsos\yii2user\controllers;
 
+use albertborsos\yii2lib\web\Controller;
 use Yii;
 use albertborsos\yii2user\models\UserDetails;
 use albertborsos\yii2user\models\UserDetailsSearch;
-use vendor\albertborsos\lib\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
