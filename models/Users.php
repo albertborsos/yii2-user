@@ -4,6 +4,7 @@
     use albertborsos\yii2lib\helpers\S;
     use albertborsos\yii2lib\helpers\Values;
     use albertborsos\yii2lib\wrappers\Editable;
+    use albertborsos\yii2lib\wrappers\Mailer;
     use albertborsos\yii2user\components\DataProvider;
     use albertborsos\yii2user\forms\SetNewPasswordForm;
     use albertborsos\yii2user\languages\hu\Messages;
@@ -369,21 +370,16 @@
         }
 
         public function sendActivationMail(){
-            $link['activation'] = Yii::$app->urlManager->getBaseUrl() . '/users/activate?email=' . $this->email . '&key=' . $this->auth_key;
-//            $link['activation'] = Yii::$app->urlManager->createUrl(['/users/activate', [
-//                'email' => $this->email,
-//                'key' => $this->auth_key,
-//            ]]);
+            $subject = 'Sikeres regisztráció';
 
-            $content = Yii::$app->getView()->renderFile('@vendor/albertborsos/yii2-user/views/mail/activation.php', [
+            $link['activation'] = Yii::$app->urlManager->getBaseUrl() . '/users/activate?email=' . $this->email . '&key=' . $this->auth_key;
+
+            $template = '@vendor/albertborsos/yii2-user/views/mail/activation.php';
+            $params = [
                 'link' => $link,
                 'user' => $this,
-            ]);
-            return Yii::$app->mailer->compose()
-                ->setHtmlBody($content)
-                ->setSubject('Sikeres regisztráció!')
-                ->setFrom(S::get(Yii::$app->params, 'adminEmail'))
-                ->setTo($this->email)
-                ->send();
+            ];
+
+            return Mailer::sendMailByView($template, $params, $this->email, $subject);
         }
     }
