@@ -114,12 +114,10 @@
         public function actionRegister()
         {
             $model = new RegisterForm();
-            if ($model->load(Yii::$app->request->post())) {
-                if ($user = $model->register()) {
-                    Yii::$app->session->setFlash(Messages::$registration_succesful);
+            if ($model->load(Yii::$app->request->post()) && $model->register()) {
+                Yii::$app->session->setFlash(Messages::$registration_succesful);
 
-                    return $this->redirect(['/users/login']);
-                }
+                return $this->redirect(['/users/login']);
             }
 
             return $this->render('register', [
@@ -131,7 +129,7 @@
         {
             if ($email === '' || $key === '') {
                 Yii::$app->session->setFlash('error', Messages::$activation_error_wrong_link);
-                $this->redirect(['/users/login']);
+                return $this->redirect(['/users/login']);
             } else {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
@@ -140,21 +138,11 @@
                     if (!is_null($user)) {
                         if ($user->validateAuthKey($key)) {
                             //ok, lehet aktiválni
-                            $user->activated_at = date('Y-m-d H:i:s');
-                            $user->status       = 'a';
-                            if ($user->save()) {
-                                $userdetails         = UserDetails::findOne([
-                                    'user_id' => $user->id
-                                ]);
-                                $userdetails->status = 'a';
-                                if ($userdetails->save()) {
-                                    $transaction->commit();
-                                    Yii::$app->session->setFlash('success', Messages::$activation_successful);
+                            if ($user->activateRegistration()) {
+                                $transaction->commit();
+                                Yii::$app->session->setFlash('success', Messages::$activation_successful);
 
-                                    return $this->redirect(['/users/login']);
-                                } else {
-                                    throw new Exception(Messages::$activation_error);
-                                }
+                                return $this->redirect(['/users/login']);
                             } else {
                                 throw new Exception(Messages::$activation_error);
                             }
@@ -184,6 +172,7 @@
                     $user = Users::findByEmail($model->email);
                     $user->generatePasswordResetToken();
                     if ($user->save()) {
+                        $user->sendReminderMail();
                         Yii::$app->session->setFlash('success', Messages::$reminder_email_sent);
 
                         return $this->redirect(['/users/login']);
@@ -194,8 +183,8 @@
             }
 
             return $this->render('reminder', [
-                    'model' => $model,
-                ]);
+                'model' => $model,
+            ]);
         }
 
         public function actionSetnewpassword($email, $key)

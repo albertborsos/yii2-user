@@ -8,10 +8,12 @@
     use albertborsos\yii2user\components\DataProvider;
     use albertborsos\yii2user\forms\SetNewPasswordForm;
     use albertborsos\yii2user\languages\hu\Messages;
+    use yii\base\Model;
     use yii\base\NotSupportedException;
     use yii\base\Security;
     use yii\data\ArrayDataProvider;
     use yii\db\ActiveRecord;
+    use yii\db\BaseActiveRecord;
     use yii\grid\ActionColumn;
     use yii\grid\GridView;
     use yii\web\IdentityInterface;
@@ -37,6 +39,16 @@
         const STATUS_ACTIVE   = 'a';
         const STATUS_INACTIVE = 'i';
         const STATUS_DELETED  = 'd';
+
+        private $_details;
+
+        public function init()
+        {
+            parent::init();
+            // léterhozza a userdetails objektumot, de csak akkor menti, ha van user_id
+            $this->getDetails();
+        }
+
 
         /**
          * @inheritdoc
@@ -99,24 +111,24 @@
 
         public function getDetails()
         {
-            $details = UserDetails::findOne(['user_id' => $this->id, 'status' => UserDetails::STATUS_ACTIVE]);
-            if (is_null($details)){
-                // if not exists create one
-                $details = new UserDetails();
-                $details->user_id = $this->id;
-                $details->status = UserDetails::STATUS_ACTIVE;
-                $details->save();
+            if (is_null($this->_details)){
+                $this->_details = UserDetails::findOne(['user_id' => $this->id]);
+                if (is_null($this->_details) && !is_null($this->id)){
+                    // if not exists create one
+                    $this->_details = new UserDetails();
+                    $this->_details->user_id = $this->id;
+                    $this->_details->status = UserDetails::STATUS_ACTIVE;
+                    $this->_details->save();
+                }
             }
-
-            return $details;
+            return $this->_details;
         }
 
         public function getFullname()
         {
-            $ud = $this->getDetails();
-            if ($ud !== null) {
-                return $ud->name_last . ' ' . $ud->name_first;
-            } else {
+            if (!is_null($this->_details)){
+                return $this->_details->name_last.' '.$this->_details->name_first;
+            }else{
                 return $this->email;
             }
         }
@@ -126,7 +138,13 @@
          */
         public static function findIdentity($id)
         {
-            return static::findOne($id);
+            $user = static::findOne($id);
+            if (!is_null($user)){
+                $user->getDetails();
+                return $user;
+            }else{
+                return null;
+            }
         }
 
 
@@ -138,10 +156,16 @@
          */
         public static function findByEmail($email, $status = self::STATUS_ACTIVE)
         {
-            return static::findOne([
+            $user = static::findOne([
                 'email'  => $email,
                 'status' => $status,
             ]);
+            if (!is_null($user)){
+                $user->getDetails();
+                return $user;
+            }else{
+                return null;
+            }
         }
 
         /**
@@ -160,10 +184,16 @@
                 return null;
             }
 
-            return static::findOne([
+            $user = static::findOne([
                 'password_reset_token' => $token,
                 'status'               => self::STATUS_ACTIVE,
             ]);
+            if (!is_null($user)){
+                $user->getDetails();
+                return $user;
+            }else{
+                return null;
+            }
         }
 
         /**
@@ -224,7 +254,7 @@
         public function generateAuthKey()
         {
             $security = new Security();
-            $this->auth_key = $security->generateRandomKey();
+            $this->auth_key = $security->generateRandomString();
         }
 
         /**
@@ -233,7 +263,7 @@
         public function generatePasswordResetToken()
         {
             $security = new Security();
-            $this->password_reset_token = $security->generateRandomKey() . '_' . time();
+            $this->password_reset_token = $security->generateRandomString() . '_' . time();
         }
 
         /**
@@ -244,9 +274,17 @@
             $this->password_reset_token = null;
         }
 
-        public function activateRegistration($email, $key)
+        public function activateRegistration()
         {
-
+            $this->activated_at = date('Y-m-d H:i:s');
+            $this->auth_key     = null;
+            $this->status       = 'a';
+            if ($this->save()){
+                $this->getDetails()->status = 'a';
+                return $this->getDetails()->save();
+            }else{
+                return false;
+            }
         }
 
         /**
@@ -375,6 +413,20 @@
             $link['activation'] = Yii::$app->urlManager->getBaseUrl() . '/users/activate?email=' . $this->email . '&key=' . $this->auth_key;
 
             $template = '@vendor/albertborsos/yii2-user/views/mail/activation.php';
+            $params = [
+                'link' => $link,
+                'user' => $this,
+            ];
+
+            return Mailer::sendMailByView($template, $params, $this->email, $subject);
+        }
+
+        public function sendReminderMail(){
+            $subject = 'Új jelszavad';
+
+            $link['reminder'] = Yii::$app->urlManager->getBaseUrl() . '/users/setnewpassword?email=' . $this->email . '&key=' . $this->password_reset_token;
+
+            $template = '@vendor/albertborsos/yii2-user/views/mail/reminder.php';
             $params = [
                 'link' => $link,
                 'user' => $this,

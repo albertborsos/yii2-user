@@ -69,16 +69,16 @@ class RegisterForm extends Model {
                 $user->status = $user::STATUS_INACTIVE;
 
                 if ($user->save()) {
-                    $userdetails = new UserDetails();
+                    $userdetails = $user->getDetails();
                     $userdetails->user_id = $user->id;
                     $userdetails->name_first = $this->firstName;
                     $userdetails->name_last = $this->lastName;
-                    $userdetails->status = $user::STATUS_INACTIVE;
+                    $userdetails->status = $user::STATUS_ACTIVE;
 
                     if ($userdetails->save()) {
                         $transaction->commit();
                         $user->sendActivationMail();
-                        return $user;
+                        return true;
                     } else {
                         $this->addError('email', 'Nem sikerült menteni a felhasználóadatokat!');
                         return false;
