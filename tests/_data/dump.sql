@@ -55,7 +55,12 @@ CREATE TABLE `tbl_user_usersessions` (
 
 INSERT INTO `tbl_user_users` (`id`, `email`, `password_hash`, `auth_key`, `password_reset_token`, `username`, `created_at`, `activated_at`, `updated_at`, `status`)
 VALUES
-	(1,'albertborsos@me.com','$2y$13$ATfxN7nHdGIC.eZj5THf5.BRh0toZ51/4p5DtUTCanA/VMgLsweW.','wwGQRT5Tc2hhTBszP22o0igy-EoCUl6r',NULL,'albertborsos','2014-04-30 22:41:27','2014-04-30 22:41:28','2014-04-30 22:41:28','a');
+	(1,'albertborsos@me.com','$2y$13$ATfxN7nHdGIC.eZj5THf5.BRh0toZ51/4p5DtUTCanA/VMgLsweW.',NULL,NULL,'albertborsos','2014-04-30 22:41:27','2014-04-30 22:41:28','2014-04-30 22:41:28','a');
+
+INSERT INTO `tbl_user_userdetails` (`id`, `user_id`, `name_first`, `name_last`, `sex`, `country`, `county`, `postal_code`, `city`, `email`, `phone_1`, `phone_2`, `website`, `comment_private`, `google_profile`, `facebook_profile`, `status`)
+VALUES
+  (1, 1, 'Albert', 'Borsos', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a');
+
 
 /**
  * Database schema required by \yii\rbac\DbManager.
@@ -96,14 +101,6 @@ create table `auth_item`
    key `type` (`type`)
 ) engine InnoDB;
 
-INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
-VALUES
-	('admin', 2, 'Adminisztrátor', NULL, NULL, NULL, NULL),
-	('editor', 2, 'Szerkesztő', NULL, NULL, NULL, NULL),
-	('guest', 2, 'Vendég', NULL, NULL, NULL, NULL),
-	('reader', 2, 'Olvasó', NULL, NULL, NULL, NULL);
-
-
 create table `auth_item_child`
 (
    `parent`               varchar(64) not null,
@@ -113,13 +110,6 @@ create table `auth_item_child`
    foreign key (`child`) references `auth_item` (`name`) on delete cascade on update cascade
 ) engine InnoDB;
 
-INSERT INTO `auth_item_child` (`parent`, `child`)
-VALUES
-	('admin', 'editor'),
-	('editor', 'reader'),
-	('reader', 'guest');
-
-
 create table `auth_assignment`
 (
    `item_name`            varchar(64) not null,
@@ -128,3 +118,20 @@ create table `auth_assignment`
    primary key (`item_name`, `user_id`),
    foreign key (`item_name`) references `auth_item` (`name`) on delete cascade on update cascade
 ) engine InnoDB;
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES
+  ('admin', 2, 'Adminisztrátor', NULL, NULL, NULL, NULL),
+  ('editor', 2, 'Szerkesztő', NULL, NULL, NULL, NULL),
+  ('guest', 2, 'Vendég', NULL, NULL, NULL, NULL),
+  ('reader', 2, 'Olvasó', NULL, NULL, NULL, NULL);
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES
+  ('admin', 'editor'),
+  ('editor', 'reader'),
+  ('reader', 'guest');
+
+INSERT INTO `auth_assignment` (`item_name`, `user_id`, `created_at`)
+VALUES
+  ('admin', '1', 1406725195);
