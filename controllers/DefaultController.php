@@ -2,6 +2,7 @@
 
     namespace albertborsos\yii2user\controllers;
 
+    use albertborsos\yii2lib\helpers\S;
     use albertborsos\yii2lib\helpers\Values;
     use albertborsos\yii2lib\web\Controller;
     use albertborsos\yii2user\forms\LoginForm;

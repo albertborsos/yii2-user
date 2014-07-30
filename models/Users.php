@@ -1,6 +1,7 @@
 <?php
     namespace albertborsos\yii2user\models;
 
+    use albertborsos\yii2lib\helpers\S;
     use albertborsos\yii2lib\helpers\Values;
     use albertborsos\yii2lib\wrappers\Editable;
     use albertborsos\yii2user\components\DataProvider;
@@ -83,7 +84,7 @@
                     //ha uj rekord
                     $this->created_at = date('Y-m-d H:i:s');
                     $security = new Security();
-                    $this->auth_key   = $security->generateRandomKey();
+                    $this->auth_key   = $security->generateRandomString();
                 } else {
                     // meglévő rekord
                     $this->updated_at = date('Y-m-d H:i:s');
@@ -365,5 +366,24 @@
             }else{
                 Yii::$app->session->setFlash('error', Messages::$new_password_error_email);
             }
+        }
+
+        public function sendActivationMail(){
+            $link['activation'] = Yii::$app->urlManager->getBaseUrl() . '/users/activate?email=' . $this->email . '&key=' . $this->auth_key;
+//            $link['activation'] = Yii::$app->urlManager->createUrl(['/users/activate', [
+//                'email' => $this->email,
+//                'key' => $this->auth_key,
+//            ]]);
+
+            $content = Yii::$app->getView()->renderFile('@vendor/albertborsos/yii2-user/views/mail/activation.php', [
+                'link' => $link,
+                'user' => $this,
+            ]);
+            return Yii::$app->mailer->compose()
+                ->setHtmlBody($content)
+                ->setSubject('Sikeres regisztráció!')
+                ->setFrom(S::get(Yii::$app->params, 'adminEmail'))
+                ->setTo($this->email)
+                ->send();
         }
     }
