@@ -1,6 +1,7 @@
 <?php
 namespace albertborsos\yii2user\forms;
 
+use albertborsos\yii2lib\helpers\S;
 use albertborsos\yii2user\models\Users;
 use Yii;
 use yii\base\Model;

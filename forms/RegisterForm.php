@@ -8,6 +8,7 @@
 
 namespace albertborsos\yii2user\forms;
 
+use albertborsos\yii2lib\helpers\S;
 use albertborsos\yii2user\models\UserDetails;
 use albertborsos\yii2user\models\Users;
 use Yii;
@@ -68,15 +69,16 @@ class RegisterForm extends Model {
                 $user->status = $user::STATUS_INACTIVE;
 
                 if ($user->save()) {
-                    $userdetails = new UserDetails();
+                    $userdetails = $user->getDetails();
                     $userdetails->user_id = $user->id;
                     $userdetails->name_first = $this->firstName;
                     $userdetails->name_last = $this->lastName;
-                    $userdetails->status = $user::STATUS_INACTIVE;
+                    $userdetails->status = $user::STATUS_ACTIVE;
 
                     if ($userdetails->save()) {
                         $transaction->commit();
-                        return $user;
+                        $user->sendActivationMail();
+                        return true;
                     } else {
                         $this->addError('email', 'Nem sikerült menteni a felhasználóadatokat!');
                         return false;

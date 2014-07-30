@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name_last')->textInput(['maxlength' => 100]) ?>
 
-    <?= $form->field($model, 'sex')->dropDownList(Values::items('sex')) ?>
+    <?= $form->field($model, 'sex')->dropDownList(Values::items('sex'), ['prompt' => 'Válassz nemet!']) ?>
 
     <?= $form->field($model, 'email')->input('email', ['maxlength' => 100]) ?>
 

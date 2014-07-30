@@ -4,11 +4,11 @@ use yii\helpers\Html;
 ?>
 <?php $form = ActiveForm::begin([
         'options' => [
-            'class' => 'form-horizontal',
+            //'class' => 'form-horizontal',
         ],
         'fieldConfig' => [
-            'template' => '{label}<div class="col-sm-8">{input}</div><div class="col-sm-12">{error}</div>',
-            'labelOptions' => ['class' => 'col-sm-4 control-label'],
+            'template' => '{label}{input}{error}',
+            'labelOptions' => ['class' => 'control-label'],
         ]
     ]);?>
 
@@ -19,11 +19,12 @@ use yii\helpers\Html;
 <?= $form->field($model, 'password_again')->passwordInput() ?>
 
 <div class="form-group">
-    <div class="col-sm-8 pull-right">
+    <div class="col-md-12 pull-right">
         <?= Html::submitButton(
             'Beállítom',
-            ['class' => 'btn btn-primary col-sm-12 col-md-3', 'id' => 'setnewpasswordform-submit']
+            ['class' => 'btn btn-primary col-sm-12 col-md-4', 'id' => 'setnewpasswordform-submit']
         ) ?>
     </div>
 </div>
+<div class="clearfix"></div>
 <?php ActiveForm::end(); ?>
