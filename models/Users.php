@@ -304,7 +304,7 @@
         public static function getUsersInGridView(){
             // lekérdezem a felhasználókat akikhez van jogosultság rendelve
             $auth = Yii::$app->getAuthManager();
-            $sql = 'SELECT * FROM ' . Users::tableName().' u'
+            $sql = 'SELECT u.*, at.item_name FROM ' . Users::tableName().' u'
                 .' LEFT JOIN '. $auth->assignmentTable. ' at'
                 .' ON at.user_id=u.id'
                 .' WHERE u.status=:status_a';
@@ -364,6 +364,9 @@
                         'header'         => Users::attributeLabels()['status'],
                         'contentOptions' => $options_center,
                         'headerOptions'  => $options_center,
+                        'value'          => function($model, $index, $widget){
+                            return DataProvider::items('status_user', $model['status'], false);
+                        },
                     ],
                     [
                         'header'         => 'Jogosultság',
@@ -372,7 +375,7 @@
                         'value'          => function ($model, $index, $widget) {
                             return Editable::select(
                                            $model['id'] . '-role',
-                                               $model['username'],
+                                               $model['id'],
                                                $model['item_name'],
                                                DataProvider::items('roles', $model['item_name'], false),
                                                ['/users/rights/modify'],

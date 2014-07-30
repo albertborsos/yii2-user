@@ -96,6 +96,14 @@ create table `auth_item`
    key `type` (`type`)
 ) engine InnoDB;
 
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES
+	('admin', 2, 'Adminisztrátor', NULL, NULL, NULL, NULL),
+	('editor', 2, 'Szerkesztő', NULL, NULL, NULL, NULL),
+	('guest', 2, 'Vendég', NULL, NULL, NULL, NULL),
+	('reader', 2, 'Olvasó', NULL, NULL, NULL, NULL);
+
+
 create table `auth_item_child`
 (
    `parent`               varchar(64) not null,
@@ -104,6 +112,13 @@ create table `auth_item_child`
    foreign key (`parent`) references `auth_item` (`name`) on delete cascade on update cascade,
    foreign key (`child`) references `auth_item` (`name`) on delete cascade on update cascade
 ) engine InnoDB;
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES
+	('admin', 'editor'),
+	('editor', 'reader'),
+	('reader', 'guest');
+
 
 create table `auth_assignment`
 (

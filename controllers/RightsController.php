@@ -2,12 +2,14 @@
 
     namespace albertborsos\yii2user\controllers;
 
+    use albertborsos\yii2lib\helpers\S;
     use albertborsos\yii2lib\web\Controller;
     use albertborsos\yii2user\languages\hu\Messages;
     use HttpException;
     use yii\filters\AccessControl;
     use yii\filters\VerbFilter;
     use Yii;
+    use yii\rbac\Item;
 
     class RightsController extends Controller {
         public $name = 'Jogosultságok';
@@ -65,20 +67,19 @@
 
         public function actionModify()
         {
-            $username = Yii::$app->request->post('pk');
-            $role     = Yii::$app->request->post('value');
+            $user_id = Yii::$app->request->post('pk');
+            $role    = Yii::$app->request->post('value');
 
             $auth = Yii::$app->authManager;
-            if ($auth->revokeAll($username)){
-                // ha nem volt hozzárendelve jog, akkor elmentem
-                $role_model = $auth->getRole($role);
-                if ($role_model !== null) {
-                    $auth->assign($role_model, $username);
-                    return true;
-                } else {
-                    throw new HttpException(400,Messages::ERROR_RIGHT_NOT_EXISTS);
-                }
+            // 1 felhasználónak csak 1 joga lehet
+            $auth->revokeAll($user_id);
+            $permission = $auth->getPermission($role);
+            if ($permission !== null) {
+                $auth->assign($permission, $user_id);
+            } else {
+                throw new HttpException(400,Messages::ERROR_RIGHT_NOT_EXISTS);
             }
+
         }
 
         public function actionRemove($id)
