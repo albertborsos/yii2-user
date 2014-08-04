@@ -18,6 +18,7 @@
     use Yii;
 
     class DefaultController extends Controller {
+        public $defaultAction = 'login';
         public function init()
         {
             parent::init();
@@ -43,17 +44,26 @@
             return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only'  => ['logout', 'register'],
+                    'only'  => ['logout', 'settings', 'profile', //reader
+                                'register', 'activate', 'login', 'setnewpassword', 'reminder'], // not logged in
                     'rules' => [
                         [
-                            'actions' => ['register'],
+                            'actions' => ['settings', 'profile', 'logout'],
                             'allow'   => true,
-                            'roles'   => ['?'],
+                            'matchCallback' => function(){
+                                return Yii::$app->user->can('reader');
+                            }
                         ],
                         [
-                            'actions' => ['logout'],
-                            'allow'   => true,
-                            'roles'   => ['@'],
+                            'actions' => ['register', 'activate', 'login', 'setnewpassword', 'reminder'],
+                            'allow' => true,
+                            'matchCallback' => function(){
+                                    if (!Yii::$app->user->isGuest){
+                                        return $this->goHome();
+                                    }else{
+                                        return true;
+                                    }
+                                }
                         ],
                     ],
                 ],
@@ -78,19 +88,8 @@
             ];
         }
 
-        public function actionIndex()
-        {
-            $this->layout = '//center';
-
-            return $this->render('index');
-        }
-
         public function actionLogin()
         {
-            if (!Yii::$app->user->isGuest) {
-                return $this->goHome();
-            }
-
             $model = new LoginForm();
             if ($model->load(Yii::$app->request->post()) && $model->login()) {
                 Yii::$app->session->setFlash('success', Messages::$login_successful);
@@ -221,7 +220,7 @@
 
         public function actionSettings()
         {
-            return $this->render('index');
+            return $this->render('settings');
         }
 
         public function actionProfile()

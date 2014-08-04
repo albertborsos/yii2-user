@@ -31,6 +31,7 @@ class Messages {
 
     public static $user_remove_successful = ' felhasználót sikeresen törölted a rendszerből!';
     public static $user_remove_error = ' felhasználó jogosultságát nem sikerült eltávolítani!';
+    public static $user_remove_yourself = 'Saját magadat nem tudod törölni, mert adminisztrátor vagy!';
     public static $user_right_not_exists = 'Ilyen jogosultság nem létezik!';
 
     public static $user_details_update_successful = '<h4>Adataidat sikeresen módosítottad!</h4>';
