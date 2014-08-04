@@ -2,12 +2,15 @@
 
     namespace albertborsos\yii2user\controllers;
 
+    use albertborsos\yii2lib\helpers\S;
     use albertborsos\yii2lib\web\Controller;
     use albertborsos\yii2user\languages\hu\Messages;
+    use albertborsos\yii2user\models\Users;
     use HttpException;
     use yii\filters\AccessControl;
     use yii\filters\VerbFilter;
     use Yii;
+    use yii\rbac\Item;
 
     class RightsController extends Controller {
         public $name = 'Jogosultságok';
@@ -26,19 +29,21 @@
             return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only'  => ['index', 'setright', 'delete'],
+                    'only'  => ['admin', 'modify', 'delete'],
                     'rules' => [
                         [
-                            'actions' => ['index', 'remove'],
+                            'actions' => ['admin', 'modify', 'delete'],
                             'allow'   => true,
-                            'roles'   => ['@'],
+                            'matchCallback' => function(){
+                                return Yii::$app->user->can('admin');
+                            }
                         ],
                     ],
                 ],
                 'verbs'  => [
                     'class'   => VerbFilter::className(),
                     'actions' => [
-                        'remove' => ['post'],
+                        'delete' => ['post'],
                     ],
                 ],
             ];
@@ -65,31 +70,34 @@
 
         public function actionModify()
         {
-            $username = Yii::$app->request->post('pk');
-            $role     = Yii::$app->request->post('value');
+            $user_id = Yii::$app->request->post('pk');
+            $role    = Yii::$app->request->post('value');
 
             $auth = Yii::$app->authManager;
-            if ($auth->revokeAll($username)){
-                // ha nem volt hozzárendelve jog, akkor elmentem
-                $role_model = $auth->getRole($role);
-                if ($role_model !== null) {
-                    $auth->assign($role_model, $username);
-                    return true;
-                } else {
-                    throw new HttpException(400,Messages::ERROR_RIGHT_NOT_EXISTS);
-                }
+            // 1 felhasználónak csak 1 joga lehet
+            $auth->revokeAll($user_id);
+            $permission = $auth->getPermission($role);
+            if ($permission !== null) {
+                $auth->assign($permission, $user_id);
+            } else {
+                throw new HttpException(400,Messages::ERROR_RIGHT_NOT_EXISTS);
             }
+
         }
 
-        public function actionRemove($id)
+        public function actionDelete($id)
         {
-            $auth = Yii::$app->authManager;
-            if ($auth->revokeAll($id)) {
-                Yii::$app->session->setFlash('success', '<h4><b>"' . $id . '"</b>' . Messages::$user_remove_successful . '</h4>');
-            } else {
-                Yii::$app->session->setFlash('error', '<h4><b>"' . $id . '"</b>' . Messages::$user_remove_error . '</h4>');
+            $fullName = Users::findIdentity($id)->getFullname();
+            if ($id !== Yii::$app->user->id){
+                $auth = Yii::$app->authManager;
+                if ($auth->revokeAll($id)) {
+                    Yii::$app->session->setFlash('success', '<h4><b>"' . $fullName . '"</b>' . Messages::$user_remove_successful . '</h4>');
+                } else {
+                    Yii::$app->session->setFlash('error', '<h4><b>"' . $fullName . '"</b>' . Messages::$user_remove_error . '</h4>');
+                }
+            }else{
+                Yii::$app->session->setFlash('error', '<h4>'.Messages::$user_remove_yourself . '</h4>');
             }
-
-            return $this->redirect(Yii::$app->getModule('users')->urls['rights']);
+            return $this->redirect(['/users/rights/admin']);
         }
     }

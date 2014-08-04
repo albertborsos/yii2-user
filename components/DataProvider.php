@@ -9,6 +9,8 @@
     namespace albertborsos\yii2user\components;
 
 
+    use albertborsos\yii2user\models\Users;
+
     class DataProvider {
 
         public static function items($category, $id = null, $returnArray = true)
@@ -21,6 +23,13 @@
                         'reader' => 'Olvasó',
                         'editor' => 'Szerkesztő',
                         'admin'  => 'Adminisztrátor',
+                    );
+                    break;
+                case 'status_user':
+                    $array = array(
+                        Users::STATUS_ACTIVE   => 'Aktív',
+                        Users::STATUS_INACTIVE => 'Inaktív',
+                        Users::STATUS_DELETED  => 'Törölt',
                     );
                     break;
             }
