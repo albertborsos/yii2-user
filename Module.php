@@ -16,7 +16,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     public function bootstrap($app)
     {
         $app->getUrlManager()->addRules([
-            $this->id . '/?' => $this->id . '/default/index',
+            $this->id . '/?' => $this->id . '/default/login',
             $this->id . '/<id:\d+>' => $this->id . '/default/view',
             $this->id . '/<action:\w+>/?' => $this->id . '/default/<action>',
             $this->id . '/<controller:\w+>/<action:\w+>' => $this->id . '/<controller>/<action>',
