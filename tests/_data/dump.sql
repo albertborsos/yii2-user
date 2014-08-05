@@ -55,7 +55,7 @@ CREATE TABLE `tbl_user_usersessions` (
 
 INSERT INTO `tbl_user_users` (`id`, `email`, `password_hash`, `auth_key`, `password_reset_token`, `username`, `created_at`, `activated_at`, `updated_at`, `status`)
 VALUES
-	(1,'albertborsos@me.com','$2y$13$ATfxN7nHdGIC.eZj5THf5.BRh0toZ51/4p5DtUTCanA/VMgLsweW.',NULL,NULL,'albertborsos','2014-04-30 22:41:27','2014-04-30 22:41:28','2014-04-30 22:41:28','a');
+	(1,'albertborsos@github.com','$2y$13$ATfxN7nHdGIC.eZj5THf5.BRh0toZ51/4p5DtUTCanA/VMgLsweW.',NULL,NULL,'albertborsos','2014-04-30 22:41:27','2014-04-30 22:41:28','2014-04-30 22:41:28','a');
 
 INSERT INTO `tbl_user_userdetails` (`id`, `user_id`, `name_first`, `name_last`, `sex`, `country`, `county`, `postal_code`, `city`, `email`, `phone_1`, `phone_2`, `website`, `comment_private`, `google_profile`, `facebook_profile`, `status`)
 VALUES

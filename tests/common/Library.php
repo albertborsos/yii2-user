@@ -17,7 +17,7 @@ class Library {
             'ok' => [
                 'firstname' => 'Albert',
                 'lastname'  => 'Borsos',
-                'email'     => 'blog@borsosalbert.hu',
+                'email'     => 'noreply@borsosalbert.hu',
                 'password'  => 'jelszó10',
             ],
         ],
@@ -25,7 +25,7 @@ class Library {
             'albert' => [
                 'firstname' => 'Albert',
                 'lastname'  => 'Borsos',
-                'email'     => 'albertborsos@me.com',
+                'email'     => 'albertborsos@github.com',
                 'password'  => 'jelszó10',
             ],
         ],
