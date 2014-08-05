@@ -1,8 +1,19 @@
 {
     "name": "albertborsos/yii2-user",
-    "description": "A collection of useful classes",
-    "type": "library",
-    "license": "MIT",
+    "description": "Yii2 User and Authentication module",
+    "keywords": ["yii2", "user", "authentication"],
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/albertborsos/yii2-user/issues",
+        "source": "https://github.com/albertborsos/yii2-user"
+    },
+    "authors": [
+        {
+            "name": "Albert Borsos",
+            "email": "blog@borsosalbert.hu"
+        }
+    ],
     "require": {
         "albertborsos/yii2-lib": "*"
     },
