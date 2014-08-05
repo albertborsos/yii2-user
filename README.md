@@ -1,13 +1,13 @@
 ## Yii2 user module
 
 ### How to use:
-1. Install via composer `albertborsos/yii2-user`
+1. Install it via composer `albertborsos/yii2-user`
 
 2. Run sql script from the `tests/_data` folder (yii migrate will available) (delete my user)
 
 3. add these snippet to your `config/main.php` file
 
-```
+```php
     'components' => [
     ...
         'authManager' => [
