@@ -21,6 +21,7 @@
         public $defaultAction = 'login';
         public function init()
         {
+            $this->setTheme('page');
             parent::init();
             $names = [
                 'profile'        => 'Profil',
