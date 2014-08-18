@@ -2,7 +2,6 @@
 
     namespace albertborsos\yii2user\controllers;
 
-    use albertborsos\yii2lib\helpers\S;
     use albertborsos\yii2lib\web\Controller;
     use albertborsos\yii2user\languages\hu\Messages;
     use albertborsos\yii2user\models\Users;
@@ -10,7 +9,6 @@
     use yii\filters\AccessControl;
     use yii\filters\VerbFilter;
     use Yii;
-    use yii\rbac\Item;
 
     class RightsController extends Controller {
         public $name = 'Jogosultságok';
@@ -88,7 +86,7 @@
         public function actionDelete($id)
         {
             $fullName = Users::findIdentity($id)->getFullname();
-            if ($id !== Yii::$app->user->id){
+            if ($id != Yii::$app->user->id){
                 $auth = Yii::$app->authManager;
                 if ($auth->revokeAll($id)) {
                     Yii::$app->session->setFlash('success', '<h4><b>"' . $fullName . '"</b>' . Messages::$user_remove_successful . '</h4>');
