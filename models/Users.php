@@ -42,6 +42,8 @@
 
         private $_details;
 
+        const RESET_TOKEN_EXPIRE = 3600; // in secs
+
         public function init()
         {
             parent::init();
@@ -176,7 +178,7 @@
          */
         public static function findByPasswordResetToken($token)
         {
-            $expire    = Yii::$app->params['user.passwordResetTokenExpire'];
+            $expire    = self::RESET_TOKEN_EXPIRE;
             $parts     = explode('_', $token);
             $timestamp = (int)end($parts);
             if ($timestamp + $expire < time()) {
