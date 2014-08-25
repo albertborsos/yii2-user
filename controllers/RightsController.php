@@ -27,7 +27,6 @@
             return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only'  => ['admin', 'modify', 'delete'],
                     'rules' => [
                         [
                             'actions' => ['admin', 'modify', 'delete'],
@@ -43,18 +42,6 @@
                     'actions' => [
                         'delete' => ['post'],
                     ],
-                ],
-            ];
-        }
-
-        /**
-         * @inheritdoc
-         */
-        public function actions()
-        {
-            return [
-                'error' => [
-                    'class' => 'yii\web\ErrorAction',
                 ],
             ];
         }

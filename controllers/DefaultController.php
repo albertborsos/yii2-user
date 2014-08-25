@@ -45,14 +45,12 @@
             return [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only'  => ['logout', 'settings', 'profile', //reader
-                                'register', 'activate', 'login', 'setnewpassword', 'reminder'], // not logged in
                     'rules' => [
                         [
                             'actions' => ['settings', 'profile'],
                             'allow'   => true,
                             'matchCallback' => function(){
-                                return Yii::$app->user->can('reader');
+                                return !Yii::$app->user->isGuest;
                             }
                         ],
                         [
