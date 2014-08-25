@@ -42,7 +42,7 @@
 
         private $_details;
 
-        const RESET_TOKEN_EXPIRE = 3600; // in secs
+        const RESET_TOKEN_EXPIRE = 604800; // in secs (one week = 604800)
 
         public function init()
         {
