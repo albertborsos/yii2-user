@@ -53,7 +53,7 @@ use yii\widgets\ActiveForm;
         <div class="col-sm-9 pull-right">
             <?= Html::submitButton(
                 'Mentés',
-                ['class' => 'btn btn-primary col-sm-12 col-md-3']
+                ['class' => 'btn btn-primary btn-block']
             ) ?>
         </div>
     </div>

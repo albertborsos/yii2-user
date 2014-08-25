@@ -22,7 +22,7 @@ use yii\helpers\Html;
     <div class="col-md-12 pull-right">
         <?= Html::submitButton(
             'Beállítom',
-            ['class' => 'btn btn-primary col-sm-12 col-md-4', 'id' => 'setnewpasswordform-submit']
+            ['class' => 'btn btn-primary btn-block', 'id' => 'setnewpasswordform-submit']
         ) ?>
     </div>
 </div>

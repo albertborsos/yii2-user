@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
  * @var ActiveForm $form
  */
 ?>
-<div class="col-md-offset-4 col-md-4">
+<div class="col-md-offset-3 col-md-6">
 
     <div class="panel panel-default">
         <div class="panel-heading"><h3 class="panel-title">Regisztráció</h3></div>
@@ -22,16 +22,16 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'password')->passwordInput() ?>
 
             <div class="btn-block">
-                <?= Html::submitButton('Regisztráció', ['class' => 'btn btn-primary col-md-12', 'id' => 'registerform-submit']) ?>
+                <?= Html::submitButton('Regisztráció', ['class' => 'btn btn-primary btn-block', 'id' => 'registerform-submit']) ?>
             </div>
             <?php ActiveForm::end(); ?>
             <div class="alert alert-info text-justify">
-                <p><b>Mi fog történni?</b> A megadott e-mailcímre kiküldünk egy aktiváló levelet. Ebben a levélben kattins a linkre, után be tudsz lépni az oldalra!</p>
+                <p><b>Mi fog történni?</b> A megadott e-mailcímre kiküldünk egy aktiváló levelet. Ebben a levélben kattins a linkre, utána be tudsz lépni az oldalra!</p>
             </div>
         </div>
         <!-- panel-body -->
     </div>
     <!-- panel panel-default -->
-    <?= Html::a('Van már fiókod? Jelentkezz be!', Yii::$app->urlManager->createUrl(['/users/login']), ['class' => 'btn col-md-12']) ?>
+    <?= Html::a('Van már fiókod? Jelentkezz be!', Yii::$app->urlManager->createUrl(['/users/login']), ['class' => 'btn btn-block']) ?>
 </div>
 <!-- login -->

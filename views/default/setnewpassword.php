@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
  * @var ActiveForm $form
  */
 ?>
-<div class="col-md-offset-4 col-md-4">
+<div class="col-md-offset-3 col-md-6">
 
     <div class="panel panel-default">
         <div class="panel-heading"><h3 class="panel-title">Új jelszó beállítása</h3></div>
