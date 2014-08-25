@@ -13,7 +13,7 @@ class Messages {
     public static $login_successful = '<h4>Sikeres bejelentkezés!</h4>';
     public static $logout_succesful = '<h4>Sikeresen kijelentkeztél!</h4>';
 
-    public static $registration_succesful = '<h4>Sikeres regisztráció!</h4>';
+    public static $registration_succesful = '<h4>Sikeres regisztráció!</h4><p>Nézd meg a postafiókodat és aktiváld a regisztrációdat!</p>';
 
     public static $activation_successful = '<h4>Sikeres aktiválás!</h4><p>Most már be tudsz lépni az oldalra!</p>';
     public static $activation_error_wrong_link = '<h4>Hibás aktiváló link!</h4><p>Nem megfelelő linket használsz!</p>';

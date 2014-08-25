@@ -49,10 +49,17 @@
                                 'register', 'activate', 'login', 'setnewpassword', 'reminder'], // not logged in
                     'rules' => [
                         [
-                            'actions' => ['settings', 'profile', 'logout'],
+                            'actions' => ['settings', 'profile'],
                             'allow'   => true,
                             'matchCallback' => function(){
                                 return Yii::$app->user->can('reader');
+                            }
+                        ],
+                        [
+                            'actions' => ['logout'],
+                            'allow'   => true,
+                            'matchCallback' => function(){
+                                return !Yii::$app->user->isGuest;
                             }
                         ],
                         [
@@ -115,9 +122,9 @@
         {
             $model = new RegisterForm();
             if ($model->load(Yii::$app->request->post()) && $model->register()) {
-                Yii::$app->session->setFlash(Messages::$registration_succesful);
+                Yii::$app->session->setFlash('success',Messages::$registration_succesful);
 
-                return $this->redirect(['/users/login']);
+                return $this->goHome();
             }
 
             return $this->render('register', [
