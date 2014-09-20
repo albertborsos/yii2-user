@@ -9,18 +9,18 @@ use yii\widgets\ActiveForm;
  * @var ActiveForm $form
  */
 ?>
-<div class="col-md-offset-3 col-md-6">
+<div class="row">
+    <div class="col-md-offset-3 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Új jelszó beállítása</h3></div>
+            <div class="panel-body">
 
-    <div class="panel panel-default">
-        <div class="panel-heading"><h3 class="panel-title">Új jelszó beállítása</h3></div>
-        <div class="panel-body">
-
-            <?php
-                include(__DIR__.'/_new_pwd_form.php');
-            ?>
+                <?php
+                    include(__DIR__.'/_new_pwd_form.php');
+                ?>
+            </div>
+            <!-- panel-body -->
         </div>
-        <!-- panel-body -->
+        <!-- panel panel-default -->
     </div>
-    <!-- panel panel-default -->
 </div>
-<!-- login -->
