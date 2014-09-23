@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
                 <?= $form->field($model, 'lastName') ?>
                 <?= $form->field($model, 'firstName') ?>
-                <?= $form->field($model, 'email') ?>
+                <?= $form->field($model, 'email')->input('email') ?>
                 <?= $form->field($model, 'password')->passwordInput() ?>
 
                 <div class="btn-block">

@@ -17,7 +17,7 @@
 
                 <?php $form = ActiveForm::begin(); ?>
 
-                <?= $form->field($model, 'email') ?>
+                <?= $form->field($model, 'email')->input('email') ?>
 
                 <div class="btn-block">
                     <?= Html::submitButton('Jelszóemlékeztető küldése!', [

@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
 
                 <?php $form->errorSummary($model); ?>
 
-                <?= $form->field($model, 'email') ?>
+                <?= $form->field($model, 'email')->input('email') ?>
                 <?= $form->field($model, 'password')->passwordInput() ?>
 
                 <?= Html::submitButton('Bejelentkezés', ['class' => 'btn btn-primary btn-block', 'id' => 'loginform-submit']) ?>
