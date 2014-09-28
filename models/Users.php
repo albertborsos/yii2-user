@@ -281,8 +281,19 @@
             $this->activated_at = date('Y-m-d H:i:s');
             $this->auth_key     = null;
             $this->status       = 'a';
+
+
             if ($this->save()){
                 $this->getDetails()->status = 'a';
+
+                $auth = Yii::$app->authManager;
+                // 1 felhasználónak csak 1 joga lehet
+                $auth->revokeAll($this->id);
+                $permission = $auth->getPermission(Yii::$app->getUser()->defaultRole);
+                if ($permission !== null) {
+                    $auth->assign($permission, $this->id);
+                }
+
                 return $this->getDetails()->save();
             }else{
                 return false;
