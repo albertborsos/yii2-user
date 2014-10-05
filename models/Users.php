@@ -128,7 +128,7 @@
 
         public function getFullname()
         {
-            if (!is_null($this->_details)){
+            if (!is_null($this->getDetails())){
                 return $this->_details->name_last.' '.$this->_details->name_first;
             }else{
                 return $this->email;
