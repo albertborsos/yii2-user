@@ -434,4 +434,22 @@
 
             return Mailer::sendMailByView($template, $params, $this->email, $subject);
         }
+
+        public static function createSubscriber($email, $nameFirst, $nameLast){
+            $user = new Users();
+            $user->email = $email;
+            $user->status = Users::STATUS_SUBSCRIBER;
+            if($user->save()){
+                $user->getDetails()->name_first = $nameFirst;
+                $user->getDetails()->name_last  = $nameLast;
+                if($user->getDetails()->save()){
+                    return $user;
+                }else{
+                    $user->getDetails()->throwNewException('Felhasználó mentése nem sikerült!');
+                }
+            }else{
+                $user->throwNewException('Felhasználó mentése nem sikerült!');
+            }
+
+        }
     }
