@@ -452,4 +452,40 @@
             }
 
         }
+
+        public static function getSubscriber($email, $nameFirst, $nameLast){
+            $user = null;
+            $users = Users::findAll(['email' => $email]);
+            switch(count($users)){
+                case 0:
+                    // nem szerepel az email cím => új user
+                    $user = Users::createSubscriber($email, $nameFirst, $nameLast);
+                    break;
+                default:
+                    // ha szerepel, akkor ellenőrizni kell a státuszát
+                    // ha van aktív fiókja, akkor azt kell használni
+                    $user = Users::findByEmail($email, Users::STATUS_ACTIVE);
+                    if (is_null($user)){
+                        // ha nincs aktív fiók,
+                        // akkor megnézem, hogy szerepel-e feliratkozóként
+                        $user = Users::findByEmail($email, Users::STATUS_SUBSCRIBER);
+                        if (is_null($user)){
+                            // ha feliratkozóként sem szerepel
+                            // akkor lekérem a legutolsó töröltet vagy inaktívat és aktívra állítom
+                            $user = Users::find()->where(['email' => $email])->orderBy(['id' => SORT_DESC])->one(); /** @var $user Users */
+                            if(!is_null($user)){
+                                $user->status = Users::STATUS_SUBSCRIBER;
+                                if (!$user->save()){
+                                    $user->throwNewException('Inaktív felhasználót nem sikerült feliratkozóvá tenni!');
+                                }
+                            }else{
+                                // ha nem talált inaktív usert sem (ilyen nem lehet)
+                                //$user = Users::createSubscriber($this->email, $this->nameFirst, $this->nameLast);
+                            }
+                        }
+                    }
+                    break;
+            }
+            return $user;
+        }
     }
