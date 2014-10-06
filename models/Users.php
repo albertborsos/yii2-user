@@ -1,6 +1,7 @@
 <?php
     namespace albertborsos\yii2user\models;
 
+    use albertborsos\yii2lib\db\ActiveRecord;
     use albertborsos\yii2lib\helpers\S;
     use albertborsos\yii2lib\helpers\Values;
     use albertborsos\yii2lib\wrappers\Editable;
@@ -12,7 +13,6 @@
     use yii\base\NotSupportedException;
     use yii\base\Security;
     use yii\data\ArrayDataProvider;
-    use yii\db\ActiveRecord;
     use yii\db\BaseActiveRecord;
     use yii\grid\ActionColumn;
     use yii\grid\GridView;
@@ -36,9 +36,10 @@
      * @property string $password write-only password
      */
     class Users extends ActiveRecord implements IdentityInterface {
-        const STATUS_ACTIVE   = 'a';
-        const STATUS_INACTIVE = 'i';
-        const STATUS_DELETED  = 'd';
+        const STATUS_ACTIVE     = 'a';
+        const STATUS_INACTIVE   = 'i';
+        const STATUS_DELETED    = 'd';
+        const STATUS_SUBSCRIBER = 's';
 
         private $_details;
 
@@ -128,8 +129,8 @@
 
         public function getFullname()
         {
-            if (!is_null($this->getDetails())){
-                return $this->_details->name_last.' '.$this->_details->name_first;
+            if (!is_null($this->getDetails()->name_first) || !is_null($this->getDetails()->name_last)){
+                return $this->getDetails()->name_last.' '.$this->_details->name_first;
             }else{
                 return $this->email;
             }
@@ -140,13 +141,7 @@
          */
         public static function findIdentity($id)
         {
-            $user = static::findOne($id);
-            if (!is_null($user)){
-                $user->getDetails();
-                return $user;
-            }else{
-                return null;
-            }
+            return static::findOne($id);
         }
 
 
@@ -158,16 +153,11 @@
          */
         public static function findByEmail($email, $status = self::STATUS_ACTIVE)
         {
-            $user = static::findOne([
+            return static::findOne([
                 'email'  => $email,
                 'status' => $status,
             ]);
-            if (!is_null($user)){
-                $user->getDetails();
-                return $user;
-            }else{
-                return null;
-            }
+
         }
 
         /**
@@ -186,16 +176,10 @@
                 return null;
             }
 
-            $user = static::findOne([
+            return static::findOne([
                 'password_reset_token' => $token,
                 'status'               => self::STATUS_ACTIVE,
             ]);
-            if (!is_null($user)){
-                $user->getDetails();
-                return $user;
-            }else{
-                return null;
-            }
         }
 
         /**

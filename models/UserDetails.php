@@ -51,7 +51,8 @@ class UserDetails extends \yii\db\ActiveRecord
             [['postal_code'], 'string', 'max' => 10],
             [['phone_1', 'phone_2'], 'string', 'max' => 30],
             [['website', 'google_profile', 'facebook_profile'], 'string', 'max' => 255],
-            [['status'], 'string', 'max' => 1]
+            [['status'], 'string', 'max' => 1],
+            [['name_first', 'name_last', 'country', 'county', 'city', 'email', 'comment_private', 'sex', 'postal_code', 'phone_1', 'phone_2', 'website', 'google_profile', 'facebook_profile'], 'default'],
         ];
     }
 
