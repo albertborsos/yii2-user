@@ -421,6 +421,17 @@
             return Mailer::sendMailByView($template, $params, $this->email, $subject);
         }
 
+        public function sendInfoMail(){
+            $subject = 'Sikeres ideoglenes regisztráció';
+
+            $template = '@vendor/albertborsos/yii2-user/views/mail/info.php';
+            $params = [
+                'user' => $this,
+            ];
+
+            return Mailer::sendMailByView($template, $params, $this->email, $subject);
+        }
+
         public function sendReminderMail(){
             $subject = 'Új jelszavad';
 
