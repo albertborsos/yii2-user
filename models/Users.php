@@ -422,7 +422,7 @@
         }
 
         public function sendInfoMail(){
-            $subject = 'Sikeres ideoglenes regisztráció';
+            $subject = 'Sikeres ideiglenes regisztráció';
 
             $template = '@vendor/albertborsos/yii2-user/views/mail/info.php';
             $params = [
