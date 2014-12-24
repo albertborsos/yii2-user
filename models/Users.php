@@ -136,6 +136,15 @@
             }
         }
 
+        public function getMobilePhoneNumber()
+        {
+            if (!is_null($this->getDetails()->phone_2)){
+                return $this->getDetails()->phone_2;
+            }else{
+                return null;
+            }
+        }
+
         /**
          * @inheritdoc
          */
