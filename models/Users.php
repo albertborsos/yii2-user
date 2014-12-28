@@ -331,43 +331,45 @@
 
             $options_center = ['class' => 'text-center'];
 
+            $usersAttributeLabels = (new Users())->attributeLabels();
+
             return GridView::widget([
                 'dataProvider' => $dataProvider,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     [
                         'attribute'      => 'email',
-                        'header'         => Users::attributeLabels()['email'],
+                        'header'         => S::get($usersAttributeLabels, 'email'),
                         'contentOptions' => $options_center,
                         'headerOptions'  => $options_center,
                     ],
                     [
                         'attribute'      => 'username',
-                        'header'         => Users::attributeLabels()['username'],
+                        'header'         => S::get($usersAttributeLabels, 'username'),
                         'contentOptions' => $options_center,
                         'headerOptions'  => $options_center,
                     ],
                     [
                         'attribute'      => 'created_at',
-                        'header'         => Users::attributeLabels()['created_at'],
+                        'header'         => S::get($usersAttributeLabels, 'created_at'),
                         'contentOptions' => $options_center,
                         'headerOptions'  => $options_center,
                     ],
                     [
                         'attribute'      => 'activated_at',
-                        'header'         => Users::attributeLabels()['activated_at'],
+                        'header'         => S::get($usersAttributeLabels, 'activated_at'),
                         'contentOptions' => $options_center,
                         'headerOptions'  => $options_center,
                     ],
                     [
                         'attribute'      => 'updated_at',
-                        'header'         => Users::attributeLabels()['updated_at'],
+                        'header'         => S::get($usersAttributeLabels, 'updated_at'),
                         'contentOptions' => $options_center,
                         'headerOptions'  => $options_center,
                     ],
                     [
                         'attribute'      => 'status',
-                        'header'         => Users::attributeLabels()['status'],
+                        'header'         => S::get($usersAttributeLabels, 'status'),
                         'contentOptions' => $options_center,
                         'headerOptions'  => $options_center,
                         'value'          => function($model, $index, $widget){
@@ -380,12 +382,12 @@
                         'format'         => 'raw',
                         'value'          => function ($model, $index, $widget) {
                             return Editable::select(
-                                           $model['id'] . '-role',
-                                               $model['id'],
-                                               $model['item_name'],
-                                               DataProvider::items('roles', $model['item_name'], false),
-                                               ['/users/rights/modify'],
-                                               DataProvider::items('roles'));
+                                $model['id'] . '-role',
+                                $model['id'],
+                                $model['item_name'],
+                                DataProvider::items('roles', $model['item_name'], false),
+                                ['/users/rights/modify'],
+                                DataProvider::items('roles'));
                         },
                         'contentOptions' => $options_center,
                         'headerOptions'  => $options_center,
