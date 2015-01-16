@@ -65,7 +65,7 @@
             if ($permission !== null) {
                 $auth->assign($permission, $user_id);
             } else {
-                throw new HttpException(400,Messages::ERROR_RIGHT_NOT_EXISTS);
+                throw new HttpException(400, 'Right not exists!');
             }
 
         }
