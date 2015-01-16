@@ -3,6 +3,7 @@
     namespace albertborsos\yii2user\controllers;
 
     use albertborsos\yii2lib\helpers\S;
+    use albertborsos\yii2lib\helpers\Seo;
     use albertborsos\yii2lib\helpers\Values;
     use albertborsos\yii2lib\web\Controller;
     use albertborsos\yii2user\forms\LoginForm;
@@ -102,6 +103,7 @@
 
                 return $this->goBack();
             } else {
+                Seo::noIndex();
                 return $this->render('login', [
                     'model' => $model,
                 ]);
@@ -124,7 +126,7 @@
 
                 return $this->goHome();
             }
-
+            Seo::noIndex();
             return $this->render('register', [
                 'model' => $model,
             ]);
@@ -186,7 +188,7 @@
                     }
                 }
             }
-
+            Seo::noIndex();
             return $this->render('reminder', [
                 'model' => $model,
             ]);
@@ -213,7 +215,7 @@
                         }
                     }
                 }
-
+                Seo::noIndex();
                 return $this->render('setnewpassword', [
                     'model' => $model,
                 ]);
@@ -226,6 +228,7 @@
 
         public function actionSettings()
         {
+            Seo::noIndex();
             return $this->render('settings');
         }
 
@@ -252,6 +255,7 @@
             $form_pwd = new SetNewPasswordForm();
             $form_pwd->email = Yii::$app->user->identity->email;
 
+            Seo::noIndex();
             return $this->render('profile', [
                 'model'         => $ud,
                 'new_pwd_model' => $form_pwd,
