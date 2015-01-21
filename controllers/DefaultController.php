@@ -112,7 +112,7 @@
 
         public function actionLogout()
         {
-            Yii::$app->user->logout();
+            Yii::$app->user->logout(Yii::$app->user->destroySession);
             Yii::$app->session->setFlash('error', Messages::$logout_succesful);
 
             return $this->goHome();
